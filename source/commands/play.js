@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const { joinVoiceChannel, createAudioPlayer } = require('@discordjs/voice');
+const { joinVoiceChannel, createAudioPlayer, NoSubscriberBehavior } = require('@discordjs/voice');
 const ytdl = require('ytdl-core');
 const ytsearch = require('yt-search');
 const mcEmbed = require('../utils/mcEmb');
@@ -10,8 +10,7 @@ module.exports = {
   data: new SlashCommandBuilder()
     .setName('play')
     .setDescription('play songs!')
-    .addStringOption(str => str.setName('song').setDescription('URL or the name of the song.')
-    .setRequired(true)),
+    .addStringOption(str => str.setName('song').setDescription('URL or the name of the song.').setRequired(true)),
   async execute(interaction, yuta) {
     if (!interaction.member.voice.channel) return interaction.reply('You need to be in a voice channel.');
     if (!interaction.member.voice.channel.permissionsFor(interaction.guild.members.me).has([PermissionsBitField.Flags.Connect, PermissionsBitField.Flags.Speak])) return interaction.reply('I don\'t have peermissions to connect/speak to your channel.');
@@ -49,7 +48,11 @@ module.exports = {
           adapterCreator: interaction.guild.voiceAdapterCreator
         });
         queueConstructor.connection = connection;
-        queueConstructor.player = createAudioPlayer();
+        queueConstructor.player = createAudioPlayer({
+          behaviors: {
+            noSubscriber: NoSubscriberBehavior.Pause
+          }
+        });
         streamPlayer(interaction.guild.id, queueConstructor.songs[0], yuta);
       } catch (error) {
         yuta.queue.delete(interaction.guild.id);
