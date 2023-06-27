@@ -6,8 +6,6 @@ const eventFiles = fs.readdirSync('./events').filter(file => file.endsWith('.js'
 
 yuta.commands = new Collection();
 yuta.queue = new Collection();
-yuta.skip = new Collection();
-yuta.player = new Collection();
 
 for (const file of eventFiles) {
   const event = require(`./events/${file}`);
@@ -20,7 +18,6 @@ for (const file of eventFiles) {
 
 const commandsPath = path.join(__dirname, 'commands');
 const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
-
 for (const file of commandFiles) {
 	const filePath = path.join(commandsPath, file);
 	const command = require(filePath);
