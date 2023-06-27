@@ -24,17 +24,17 @@ async function streamPlayer(guildId, songStream, yuta) {
     songQueue.connection.subscribe(player);
   }
 
-  player.on(AudioPlayerStatus.Playing, (oldState) => {
-    if (oldState.status === AudioPlayerStatus.Idle) {
-      // the player was idle before, meaning the previous song has ended
-      songQueue.songs.shift(); // remove the previous song from the queue
-      streamPlayer(guildId, songQueue.songs[0], yuta); // play the next song
-    }
-  });
+  // player.on(AudioPlayerStatus.Playing, (oldState) => {
+  //   if (oldState.status === AudioPlayerStatus.Idle) {
+  //     // the player was idle before, meaning the previous song has ended
+      
+  //   }
+  // });
   
   player.on(AudioPlayerStatus.Idle, (oldState, newState) => {
+    songQueue.songs.shift(); // remove the previous song from the queue
+      streamPlayer(guildId, songQueue.songs[0], yuta); // play the next song
     if (player.subscribers.length === 0) {
-      // the player has no subscribers, meaning no one is listening
       songQueue.connection.disconnect(); // disconnect from the voice channel
       songQueue.textChannel.send('No one is listening, leaving the vc.'); // send a message
     }
