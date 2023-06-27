@@ -1,5 +1,5 @@
 const { createAudioPlayer, createAudioResource, NoSubscriberBehavior, AudioPlayerStatus } = require('@discordjs/voice');
-const ytdl = require('ytdl-core-discord');
+const ytdl = require('ytdl-core');
 const mcEmbed = require('./mcEmb');
 
 async function streamPlayer(guildId, songStream, yuta) {
@@ -11,7 +11,12 @@ async function streamPlayer(guildId, songStream, yuta) {
     return;
   }
 
-  const streamCache = ytdl(songStream.url);
+  const streamCache = ytdl(songStream.url, {
+    filter: 'audioonly', // only stream audio
+    highWaterMark: 1 << 25, // set the buffer size to 32 MB
+    quality: 'highestaudio', // use the highest audio quality
+    dlChunkSize: 0 // download the entire audio at once
+  });  
   const stream = createAudioResource(streamCache);
   const player = songQueue.player;
   player.play(stream);
