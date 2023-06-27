@@ -11,7 +11,7 @@ module.exports = {
 		.setTitle('Ping')
 		.setColor('LuminousVividPink')
 		.setThumbnail(yuta.user.displayAvatarURL())
-		.setDescription(`• Roundtrip ping: \`${rtPing}\`ms\n • Websocket ping: \`${yuta.ws.ping}ms\``);
+		.setDescription(`* Roundtrip ping: \`${rtPing}\`ms\n * Websocket ping: \`${yuta.ws.ping}ms\``);
 		initialMessage.edit({ embeds: [emb] });
 	},
 };
