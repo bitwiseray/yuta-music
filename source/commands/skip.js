@@ -1,4 +1,5 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
+const streamPlayer = require('../utils/player');
 
 module.exports = {
     data: new SlashCommandBuilder()
