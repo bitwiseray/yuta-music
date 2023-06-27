@@ -10,13 +10,13 @@ async function streamPlayer(guildId, songStream, yuta) {
     songQueue.textChannel.send('No more songs to play');
     return;
   }
-
   const streamCache = ytdl(songStream.url, {
-    filter: 'audioonly', // only stream audio
-    highWaterMark: 1 << 25, // set the buffer size to 32 MB
-    quality: 'highestaudio', // use the highest audio quality
-    dlChunkSize: 0 // download the entire audio at once
-  });  
+    filter: 'audioonly',
+    highWaterMark: 1 << 25,
+    quality: 'highestaudio',
+    dlChunkSize: 0
+  });
+
   const stream = createAudioResource(streamCache);
   const player = songQueue.player;
   player.play(stream);
@@ -24,22 +24,16 @@ async function streamPlayer(guildId, songStream, yuta) {
     songQueue.connection.subscribe(player);
   }
 
-  // player.on(AudioPlayerStatus.Playing, (oldState) => {
-  //   if (oldState.status === AudioPlayerStatus.Idle) {
-  //     // the player was idle before, meaning the previous song has ended
-      
-  //   }
-  // });
-  
   player.on(AudioPlayerStatus.Idle, (oldState, newState) => {
-    songQueue.songs.shift(); // remove the previous song from the queue
-      streamPlayer(guildId, songQueue.songs[0], yuta); // play the next song
     if (player.subscribers.length === 0) {
-      songQueue.connection.disconnect(); // disconnect from the voice channel
-      songQueue.textChannel.send('No one is listening, leaving the vc.'); // send a message
+      songQueue.connection.disconnect();
+      songQueue.textChannel.send('No one is listening, leaving the vc.');
+    } else {
+      songQueue.songs.shift();
+      streamPlayer(guildId, songQueue.songs[0], yuta);
     }
   });
-  
+
   player.on('error', (error) => {
     songQueue.textChannel.send(`Error playing **${songStream.title}**: ${error.message}`);
     if (songQueue.songs.length > 1) {
