@@ -1,4 +1,4 @@
-const { createAudioPlayer, createAudioResource, NoSubscriberBehavior, AudioPlayerStatus } = require('@discordjs/voice');
+const { createAudioPlayer, createAudioResource, AudioPlayerStatus } = require('@discordjs/voice');
 const ytdl = require('ytdl-core');
 const mcEmbed = require('./mcEmb');
 
@@ -26,8 +26,10 @@ async function streamPlayer(guildId, songStream, yuta) {
 
   player.on(AudioPlayerStatus.Idle, (oldState, newState) => {
     if (player.subscribers.length === 0) {
-      songQueue.connection.disconnect();
-      songQueue.textChannel.send('No one is listening, leaving the vc.');
+      setTimeout(() => {
+        songQueue.connection.disconnect();
+        songQueue.textChannel.send('No one is listening, leaving the vc.');
+      }, 25 * 1000)
     } else {
       songQueue.songs.shift();
       streamPlayer(guildId, songQueue.songs[0], yuta);
