@@ -38,7 +38,7 @@ module.exports = {
         textChannel: interaction.channel,
         connection: null,
         songs: [],
-        player: null // added a new property player
+        player: null
       }
       queueConstructor.songs.push(song);
       yuta.queue.set(interaction.guild.id, queueConstructor);
@@ -49,10 +49,7 @@ module.exports = {
           adapterCreator: interaction.guild.voiceAdapterCreator
         });
         queueConstructor.connection = connection;
-        // create a new player only if it doesn't exist
-        if (!queueConstructor.player) {
-          queueConstructor.player = createAudioPlayer();
-        }
+        queueConstructor.player = createAudioPlayer();
         streamPlayer(interaction.guild.id, queueConstructor.songs[0], yuta);
       } catch (error) {
         yuta.queue.delete(interaction.guild.id);
@@ -61,10 +58,6 @@ module.exports = {
       }
     } else {
       guildQueue.songs.push(song);
-      // create a new player only if it doesn't exist
-      if (!guildQueue.player) {
-        guildQueue.player = createAudioPlayer();
-      }
     }
   }
 }

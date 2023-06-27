@@ -25,7 +25,7 @@ module.exports = {
             .setThumbnail(songs[0].thumbnail)
             .setColor('LuminousVividPink')
             .setTitle('Server Queue')
-            .setDescription(`${songs.length} songs • ${formatTime(totalLength)}\n\n${list}`)
+            .setDescription(`${songs.length} songs • ${formatTime(totalLength)}m\n\n${list}`)
             .setFooter({ text: interaction.guild.name, iconURL: interaction.guild.iconURL() });
         interaction.reply({ embeds: [embed] });
     },
