@@ -35,7 +35,7 @@ async function streamPlayer(guildId, songStream, yuta) {
   });
 
   player.on('error', (error) => {
-    songQueue.textChannel.send(`Error playing **${songStream.title}**: ${error.message}`);
+    songQueue.textChannel.send(`Error playing **${songStream.title}**: \`${error.message}\``);
     if (songQueue.songs.length > 1) {
       songQueue.songs.shift();
       streamPlayer(guildId, songQueue.songs[0], yuta);
