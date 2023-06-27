@@ -5,20 +5,10 @@ module.exports = {
   once: true,
   execute(yuta) {
     console.log(`Ready! logged has ${yuta.user.username}!`);
-    let status = 'Music';
-    const globalQueue = yuta.queue.values();
-    const firstResult = globalQueue.next();
-    if (!firstResult.done) {
-      const firstQueue = firstResult.value;
-      if (firstQueue) {
-        if (firstQueue.songs[0]) {
-          status = `Now listening to ${firstQueue.songs[0].title}`;
-        }
-      }
-    }
+    let status = `Tipsy by Wanuka`;
     yuta.user.setPresence({
       activities: [{
-        name: str,
+        name: status,
         type: ActivityType.Listening
       }],
       status: 'online'
