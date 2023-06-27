@@ -4,7 +4,7 @@ const ytdl = require('ytdl-core-discord');
 const ytsearch = require('yt-search');
 const mcEmbed = require('../utils/mcEmb');
 const streamPlayer = require('../utils/player');
-const { Permissions } = require('discord.js');
+const { PermissionsBitField } = require('discord.js');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -14,7 +14,7 @@ module.exports = {
     .setRequired(true)),
   async execute(interaction, yuta) {
     if (!interaction.member.voice.channel) return interaction.reply('You need to be in a voice channel.');
-    if (!interaction.member.voice.channel.permissionsFor(interaction.guild.members.me).has([Permissions.FLAGS.CONNECT, Permissions.FLAGS.SPEAK])) return interaction.reply('I don\'t have peermissions to connect/speak to your channel.');
+    if (!interaction.member.voice.channel.permissionsFor(interaction.guild.members.me).has([PermissionsBitField.Flags.Connect, PermissionsBitField.Flags.Speak])) return interaction.reply('I don\'t have peermissions to connect/speak to your channel.');
     await interaction.deferReply();
     const guildQueue = yuta.queue.get(interaction.guild.id);
     const query = interaction.options.getString('song');

@@ -11,10 +11,10 @@ module.exports = {
         const songs = queue.songs;
         let list = songs.map((song, index) => `\`${index + 1}.\` **${song.title}** requested by ${song.author}`).join('\n');
         let totalLength = songs.reduce((sum, song) => sum + song.timestamp, 0);
-        function formatTime(seconds) {
-            let hours = Math.floor(seconds / 3600);
-            let minutes = Math.floor((seconds % 3600) / 60);
-            let seconds = Math.floor(seconds % 60);
+        function formatTime(time) {
+            let hours = Math.floor(time / 3600);
+            let minutes = Math.floor((time % 3600) / 60);
+            let seconds = Math.floor(time % 60);
             let output = '';
             if (hours > 0) output += `${hours}:${minutes < 10 ? "0" : ""} hours `;
             output += `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
