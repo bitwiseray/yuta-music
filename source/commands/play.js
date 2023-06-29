@@ -20,12 +20,12 @@ module.exports = {
     let song = {};
     if (ytdl.validateURL(query)) {
       const songCache = await ytdl.getBasicInfo(query);
-      song = { title: songCache.videoDetails.title, thumbnail: songCache.videoDetails.thumbnails[0].url, author: interaction.member, url: songCache.videoDetails.video_url, artist: songCache.ownerChannelName, length: songCache.lengthSeconds, date: songCache.uploadDate };
+      song = { title: songCache.videoDetails.title, thumbnail: songCache.videoDetails.thumbnails[0].url, author: interaction.member, url: songCache.videoDetails.video_url, artist: songCache.ownerChannelName, length: songCache.lengthSeconds, timestamp: songCache.timestamp, date: songCache.uploadDate };
     } else {
       const songNameCache = await ytsearch(query);
       const songRes = (songNameCache.videos.length > 1) ? songNameCache.videos[0] : null;
       if (songRes) {
-        song = { title: songRes.title, thumbnail: songRes.thumbnail, author: interaction.member, url: songRes.url, artist: songRes.author.name, length: songRes.duration.timestamp, date: songRes.ago };
+        song = { title: songRes.title, thumbnail: songRes.thumbnail, author: interaction.member, url: songRes.url, artist: songRes.author.name, length: songRes.duration.timestamp, timestamp: songRes.seconds, date: songRes.ago };
       } else {
         return interaction.reply('I cannot find anything related to your query.');
       }
