@@ -9,7 +9,7 @@ module.exports = {
         if (!yuta.queue.has(interaction.guild.id)) return interaction.reply('No queue is assigned yet. Play some music using </play:1049229882988695552>!');
         const queue = yuta.queue.get(interaction.guild.id);
         const songs = queue.songs;
-        let list = songs.map((song, index) => `\`${index + 1}.\` **${song.title}** requested by ${song.author}`).join('\n');
+        let list = songs.map((song, index) => `${index + 1}. **${song.title}** requested by ${song.author}`).join('\n');
         let totalLength = songs.reduce((sum, song) => sum + song.timestamp, 0);
         function formatTime(time) {
             let hours = Math.floor(time / 3600);
