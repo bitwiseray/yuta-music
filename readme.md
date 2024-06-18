@@ -1,4 +1,4 @@
-# Yuta Music (Beta)
+# Yuta Music (Archived)
 Yuta Music is a simple and easy-to-use Discord music bot that supports slash commands. It uses Discord.js and ytdl-core to play songs from YouTube in your voice channels.
 
 ![Yuta bg (I don't own this image)](yuta-bg.jpeg)
