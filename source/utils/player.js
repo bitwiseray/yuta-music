@@ -1,6 +1,17 @@
 const { createAudioPlayer, createAudioResource, AudioPlayerStatus } = require('@discordjs/voice');
-const ytdl = require('ytdl-core');
+const ytdl = require('@distube/ytdl-core');
+const { ActivityType } = require('discord.js');
 const mcEmbed = require('./mcEmb');
+
+function setStatus(songName, yuta) {
+  yuta.user.setPresence({
+    activities: [{
+      name: songName || 'Rawrr! 🐾',
+      type: ActivityType.Listening
+    }],
+    status: 'online'
+  });
+}
 
 async function streamPlayer(guildId, songStream, yuta) {
   var songQueue = yuta.queue.get(guildId);
@@ -20,19 +31,21 @@ async function streamPlayer(guildId, songStream, yuta) {
   const stream = createAudioResource(streamCache);
   const player = songQueue.player;
   player.play(stream);
+  setStatus(songQueue.songs[0].title, yuta)
   if (!songQueue.connection.subscribe(player)) {
     songQueue.connection.subscribe(player);
   }
-
   player.on(AudioPlayerStatus.Idle, (oldState, newState) => {
     if (player.subscribers.length === 0) {
       setTimeout(() => {
         songQueue.connection.disconnect();
         songQueue.textChannel.send('No one is listening, leaving the vc.');
-      }, 25 * 1000)
+        setStatus(null, yuta)
+      }, 5 * 1000);
     } else {
       songQueue.songs.shift();
       streamPlayer(guildId, songQueue.songs[0], yuta);
+      setStatus(songQueue.songs[0].title, yuta)
     }
   });
 
