@@ -4,13 +4,23 @@ const { ActivityType } = require('discord.js');
 const mcEmbed = require('./mcEmb');
 
 function setStatus(songName, yuta) {
-  yuta.user.setPresence({
-    activities: [{
-      name: songName || 'Rawrr! 🐾',
-      type: ActivityType.Listening
-    }],
-    status: 'online'
-  });
+  if (!songName) {
+    yuta.user.setPresence({
+      activities: [{
+        name: 'Rawrr! 🐾',
+        type: ActivityType.Playing
+      }],
+      status: 'online'
+    });
+  } else {
+    yuta.user.setPresence({
+      activities: [{
+        name: songName,
+        type: ActivityType.Listening
+      }],
+      status: 'online'
+    });
+  }
 }
 
 async function streamPlayer(guildId, songStream, yuta) {
@@ -31,7 +41,7 @@ async function streamPlayer(guildId, songStream, yuta) {
   const stream = createAudioResource(streamCache);
   const player = songQueue.player;
   player.play(stream);
-  setStatus(songQueue.songs[0].title, yuta)
+  setStatus(songQueue.songs[0]?.title, yuta)
   if (!songQueue.connection.subscribe(player)) {
     songQueue.connection.subscribe(player);
   }
@@ -45,7 +55,7 @@ async function streamPlayer(guildId, songStream, yuta) {
     } else {
       songQueue.songs.shift();
       streamPlayer(guildId, songQueue.songs[0], yuta);
-      setStatus(songQueue.songs[0].title, yuta)
+      setStatus(songQueue.songs[0]?.title, yuta)
     }
   });
 
