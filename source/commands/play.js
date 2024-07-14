@@ -40,7 +40,6 @@ module.exports = {
         player: null
       }
       queueConstructor.songs.push(song);
-      yuta.queue.set(interaction.guild.id, queueConstructor);
       try {
         const connection = await joinVoiceChannel({
           channelId: interaction.member.voice.channel.id,
@@ -48,16 +47,18 @@ module.exports = {
           adapterCreator: interaction.guild.voiceAdapterCreator
         });
         queueConstructor.connection = connection;
-        queueConstructor.player = createAudioPlayer({
+        let playerInstance = createAudioPlayer({
           behaviors: {
             noSubscriber: NoSubscriberBehavior.Pause
           }
         });
+        queueConstructor.player = playerInstance;
+        yuta.queue.set(interaction.guild.id, queueConstructor);
         streamPlayer(interaction.guild.id, queueConstructor.songs[0], yuta);
       } catch (error) {
         yuta.queue.delete(interaction.guild.id);
         interaction.channel.send(`Error connecting to the channel, \`${error}\``);
-        throw error;
+        throw new Error(error);
       }
     } else {
       guildQueue.songs.push(song);
